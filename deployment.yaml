@@ -1,0 +1,35 @@
+---
+kind: Service
+apiVersion: v1
+metadata: 
+  name: sampleservice
+spec:
+  selector: 
+    app: myapp
+  ports:
+    - protocol: "TCP"
+      port: 8080
+      targetPort: 8080
+      nodePort: 30001
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myappdeployment
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: myapp
+          image: vectormike/kubernetes_deploy:v1
+          ports:
+            - containerPort: 8080
